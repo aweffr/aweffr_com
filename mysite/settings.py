@@ -17,13 +17,16 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
-    DEBUG=(bool, False)
+    DEBUG=(bool, False),
+    IMAGE_COMPRESS_QUALITY=(int, 90),
 )
 env.read_env()
 
 SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = env("DEBUG")
+
+ADMIN_URL_SUFFIX = env("ADMIN_URL_SUFFIX")
 
 ALLOWED_HOSTS = [
     'aweffr.com',
@@ -157,3 +160,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     )
 }
+
+IMAGE_COMPRESS_QUALITY = env("IMAGE_COMPRESS_QUALITY")

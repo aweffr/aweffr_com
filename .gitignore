@@ -3,6 +3,11 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=django,pycharm+all,react
 
 ### Django ###
+mysite/.env
+mysite/prod.env
+
+staticfiles/
+
 *.log
 *.pot
 *.pyc

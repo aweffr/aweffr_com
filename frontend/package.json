@@ -152,5 +152,9 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/dom": "7.21.4",
+    "webpack-bundle-tracker": "0.4.3"
   }
 }

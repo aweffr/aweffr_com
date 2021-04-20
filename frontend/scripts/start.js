@@ -48,6 +48,10 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 
+// 强制websocket连接dev server
+process.env.WDS_SOCKET_HOST = '127.0.0.1';
+process.env.WDS_SOCKET_PORT = '3000';
+
 if (process.env.HOST) {
   console.log(
     chalk.cyan(

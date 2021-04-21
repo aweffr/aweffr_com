@@ -1,6 +1,15 @@
 import React, {useState} from 'react';
 import {Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink} from 'reactstrap';
 
+const MyNavLink = ({href, children}: {href: string, children: string}) => {
+
+  const isActive = window.location.pathname.includes(href);
+
+  return (
+    <NavLink className="my-nav-link" href={href} active={isActive}>{children}</NavLink>
+  )
+};
+
 const MyNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
@@ -13,24 +22,24 @@ const MyNavbar = () => {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
             <NavItem>
-              <NavLink href="/article/">随笔</NavLink>
+              <MyNavLink href="/article/">随笔</MyNavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/study/">学习</NavLink>
+              <MyNavLink href="/study/">学习</MyNavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/archives/">归档</NavLink>
+              <MyNavLink href="/archives/">归档</MyNavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/todo/">todo清单</NavLink>
+              <MyNavLink href="/todo/">todo清单</MyNavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/tweets/">碎碎念</NavLink>
+              <MyNavLink href="/tweets/">碎碎念</MyNavLink>
             </NavItem>
           </Nav>
           <Nav navbar>
             <NavItem>
-              <NavLink href="/tools/">工具箱</NavLink>
+              <MyNavLink href="/tools/">工具箱</MyNavLink>
             </NavItem>
           </Nav>
         </Collapse>

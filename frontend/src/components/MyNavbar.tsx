@@ -2,15 +2,13 @@ import React, {useState} from 'react';
 import {Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink} from 'reactstrap';
 
 const MyNavLink = ({href, children}: {href: string, children: string}) => {
-
   const isActive = window.location.pathname.includes(href);
-
   return (
-    <NavLink className="my-nav-link" href={href} active={isActive}>{children}</NavLink>
+    <NavLink className={"my-nav-link " + (isActive ? "nav-active" : "nav-inactive")} href={href}>{children}</NavLink>
   )
 };
 
-const MyNavbar = () => {
+const MyNavbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
@@ -28,18 +26,18 @@ const MyNavbar = () => {
               <MyNavLink href="/study/">学习</MyNavLink>
             </NavItem>
             <NavItem>
-              <MyNavLink href="/archives/">归档</MyNavLink>
+              <MyNavLink href="/archive/">归档</MyNavLink>
             </NavItem>
             <NavItem>
               <MyNavLink href="/todo/">todo清单</MyNavLink>
             </NavItem>
             <NavItem>
-              <MyNavLink href="/tweets/">碎碎念</MyNavLink>
+              <MyNavLink href="/tweet/">碎碎念</MyNavLink>
             </NavItem>
           </Nav>
           <Nav navbar>
             <NavItem>
-              <MyNavLink href="/tools/">工具箱</MyNavLink>
+              <MyNavLink href="/tool/">工具箱</MyNavLink>
             </NavItem>
           </Nav>
         </Collapse>

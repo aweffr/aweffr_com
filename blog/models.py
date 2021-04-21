@@ -7,6 +7,7 @@ import markdown
 from PIL import Image
 from django.utils.timezone import localtime
 from django.utils import timezone
+import bs4
 
 
 def get_uploaded_filename(instance, filename):
@@ -15,7 +16,11 @@ def get_uploaded_filename(instance, filename):
 
 
 def convert_to_markdown(text):
-    return markdown.markdown(text, extensions=['markdown.extensions.fenced_code'])
+    html = markdown.markdown(text, extensions=['markdown.extensions.fenced_code'])
+    soup = bs4.BeautifulSoup(html, "html.parser")
+    for tag in soup.find_all("img"):
+        tag["class"] = "w-100"
+    return soup.prettify()
 
 
 class UploadedImage(models.Model):
@@ -98,3 +103,14 @@ class Article(models.Model):
 
     class Meta:
         verbose_name = verbose_name_plural = "随笔"
+
+
+class Tweet(models.Model):
+    text = models.TextField(blank=False, verbose_name="正文")
+    image = models.ForeignKey(UploadedImage, on_delete=models.SET_NULL, related_name="+", blank=True, null=True, verbose_name="配图")
+
+    create_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def text_html(self):
+        return convert_to_markdown(self.text)

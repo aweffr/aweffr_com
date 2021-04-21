@@ -17,6 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 
+admin.site.site_title = "aweffr's 小屋"
+admin.site.site_header = "系统管理 "
+admin.site.index_title = "站点管理"
+
 urlpatterns = [
     path('', include('blog.urls')),
     path(f'admin-{settings.ADMIN_URL_SUFFIX}/', admin.site.urls),

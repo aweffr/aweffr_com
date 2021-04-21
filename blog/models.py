@@ -5,6 +5,8 @@ from django.db import models
 import uuid
 import markdown
 from PIL import Image
+from django.utils.timezone import localtime
+from django.utils import timezone
 
 
 def get_uploaded_filename(instance, filename):
@@ -23,6 +25,9 @@ class UploadedImage(models.Model):
 
     class Meta:
         verbose_name = verbose_name_plural = "图片"
+
+    def __str__(self):
+        return f'<图片 id={self.id} create_at={localtime(self.create_at)}>'
 
     def get_with_size(self, size: int):
         name, ext = os.path.splitext(self.image.name)
@@ -50,18 +55,27 @@ class UploadedImage(models.Model):
         return file_with_size
 
 
-class Post(models.Model):
-    title = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255, editable=False)
+class Article(models.Model):
+    title = models.CharField(max_length=255, verbose_name="标题")
+    slug = models.SlugField(max_length=255, verbose_name="slug", unique=True)
 
-    is_published = models.BooleanField(default=False)
-    time_published = models.DateTimeField(blank=True, null=True)
-    time_modified = models.DateTimeField(auto_now=True)
+    is_published = models.BooleanField(default=False, verbose_name="已发表")
+    time_published = models.DateTimeField(blank=True, null=True, verbose_name="发表时间")
+    time_modified = models.DateTimeField(auto_now=True, verbose_name="修改时间")
     content_markdown = models.TextField(blank=True)
 
     @property
     def content_html(self):
         return markdown.markdown(self.content_markdown, extensions=['markdown.extensions.fenced_code'])
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if self.is_published and self.time_published is None:
+            self.time_published = timezone.now()
+
+        super().save(force_insert, force_update, using, update_fields)
+
+    def __str__(self):
+        return f'{self.title}'
 
     class Meta:
         verbose_name = verbose_name_plural = "随笔"

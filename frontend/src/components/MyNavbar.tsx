@@ -13,7 +13,7 @@ const MyNavbar = () => {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
             <NavItem>
-              <NavLink href="/blogs/">随笔</NavLink>
+              <NavLink href="/article/">随笔</NavLink>
             </NavItem>
             <NavItem>
               <NavLink href="/study/">学习</NavLink>

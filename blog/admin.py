@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UploadedImage, Post
+from .models import UploadedImage, Article
 
 
 # Register your models here.
@@ -8,6 +8,6 @@ class UploadedImageAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
+@admin.register(Article)
+class ArticleAdmin(admin.ModelAdmin):
     pass

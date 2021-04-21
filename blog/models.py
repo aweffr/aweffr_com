@@ -14,6 +14,10 @@ def get_uploaded_filename(instance, filename):
     return path
 
 
+def convert_to_markdown(text):
+    return markdown.markdown(text, extensions=['markdown.extensions.fenced_code'])
+
+
 class UploadedImage(models.Model):
     """An image uploaded to the site, by an author."""
     title = models.CharField(max_length=100, blank=True)
@@ -55,6 +59,14 @@ class UploadedImage(models.Model):
         return file_with_size
 
 
+class RelatedLink(models.Model):
+    name = models.CharField(max_length=255, verbose_name="连接名")
+    link = models.CharField(max_length=255, verbose_name="连接")
+
+    class Meta:
+        verbose_name = verbose_name_plural = "相关链接"
+
+
 class Article(models.Model):
     title = models.CharField(max_length=255, verbose_name="标题")
     slug = models.SlugField(max_length=255, verbose_name="slug", unique=True)
@@ -62,11 +74,18 @@ class Article(models.Model):
     is_published = models.BooleanField(default=False, verbose_name="已发表")
     time_published = models.DateTimeField(blank=True, null=True, verbose_name="发表时间")
     time_modified = models.DateTimeField(auto_now=True, verbose_name="修改时间")
-    content_markdown = models.TextField(blank=True)
+    abstract_markdown = models.TextField(blank=True, verbose_name="摘要")
+    content_markdown = models.TextField(blank=True, verbose_name="正文")
+
+    related_links = models.ManyToManyField(RelatedLink, related_name="+")
+
+    @property
+    def abstract_html(self):
+        return convert_to_markdown(self.abstract_markdown)
 
     @property
     def content_html(self):
-        return markdown.markdown(self.content_markdown, extensions=['markdown.extensions.fenced_code'])
+        return convert_to_markdown(self.content_markdown)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if self.is_published and self.time_published is None:

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UploadedImage, Article
+from .models import UploadedImage, RelatedLink, Article
 
 
 # Register your models here.
@@ -8,6 +8,11 @@ class UploadedImageAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(RelatedLink)
+class RelatedLinkAdmin(admin.ModelAdmin):
+    pass
+
+
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("title", "slug", "time_modified")

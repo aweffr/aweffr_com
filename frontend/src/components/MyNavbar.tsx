@@ -26,10 +26,7 @@ const MyNavbar: React.FC = () => {
               <MyNavLink href="/study/">学习</MyNavLink>
             </NavItem>
             <NavItem>
-              <MyNavLink href="/archive/">归档</MyNavLink>
-            </NavItem>
-            <NavItem>
-              <MyNavLink href="/todo/">todo清单</MyNavLink>
+              <MyNavLink href="/archive/">收藏</MyNavLink>
             </NavItem>
             <NavItem>
               <MyNavLink href="/tweet/">碎碎念</MyNavLink>

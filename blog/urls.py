@@ -16,4 +16,6 @@ urlpatterns = [
     path("todo/", views.view_todo_list),
     path("tweet/", views.view_tweet_list),
     path("tool/", views.view_tool_list),
+
+    path("image/<str:slug>/", views.view_image)
 ]

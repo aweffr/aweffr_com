@@ -11,7 +11,8 @@ import bs4
 
 
 def get_uploaded_filename(instance, filename):
-    path = "protected/images/{}_{}".format(uuid.uuid4(), filename)
+    name, ext = os.path.splitext(filename)
+    path = "protected/images/{}{}".format(instance.id, ext)
     return path
 
 
@@ -23,9 +24,20 @@ def convert_to_markdown(text):
     return soup.prettify()
 
 
+class UploadedFile(models.Model):
+    slug = models.SlugField(max_length=255, verbose_name="slug", unique=True)
+    title = models.CharField(max_length=255, blank=True)
+    file = models.FileField(upload_to="files/")
+    create_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = verbose_name_plural = "文件"
+
+
 class UploadedImage(models.Model):
     """An image uploaded to the site, by an author."""
-    title = models.CharField(max_length=100, blank=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid1, editable=False)
+    title = models.CharField(max_length=255, blank=True)
     image = models.ImageField(upload_to=get_uploaded_filename, height_field='height', width_field='width')
 
     width = models.IntegerField(null=True, blank=True)
@@ -36,7 +48,7 @@ class UploadedImage(models.Model):
         verbose_name = verbose_name_plural = "图片"
 
     def __str__(self):
-        return f'<图片 id={self.id} create_at={localtime(self.create_at)}>'
+        return f'<图片 create_at={localtime(self.create_at)}>'
 
     def get_with_size(self, size: int):
         name, ext = os.path.splitext(self.image.name)
@@ -68,21 +80,67 @@ class RelatedLink(models.Model):
     name = models.CharField(max_length=255, verbose_name="连接名")
     link = models.CharField(max_length=255, verbose_name="连接")
 
+    @property
+    def type(self):
+        if "www.zhihu.com" in self.link:
+            return "zhihu"
+        elif "bilibili.com" in self.link:
+            return "bilibili"
+        elif "youtube.com" in self.link:
+            return "youtube"
+        return ""
+
     class Meta:
         verbose_name = verbose_name_plural = "相关链接"
 
 
 class Article(models.Model):
+    TYPE_ARTICLE = "ARTICLE"
+    TYPE_ARCHIVE = "ARCHIVE"
+    TYPE_STUDY = "STUDY"
+
+    TYPE_CHOICES = (
+        (TYPE_ARTICLE, TYPE_ARTICLE),
+        (TYPE_ARCHIVE, TYPE_ARCHIVE),
+        (TYPE_STUDY, TYPE_STUDY),
+    )
+
+    SOURCE_MINE = "原创"
+    SOURCE_BILIBILI = "bilibili"
+    SOURCE_ZHIHU = "知乎"
+    SOURCE_CAIXIN = "财新"
+    SOURCE_TECH_CONF = "技术演讲"
+    SOURCE_YOUTUBE = "youtube"
+    SOURCE_MOOC = "公开课"
+    SOURCE_OTHER = "其他"
+
+    SOURCE_CHOICES = (
+        (SOURCE_MINE, SOURCE_MINE),
+        (SOURCE_BILIBILI, SOURCE_BILIBILI),
+        (SOURCE_ZHIHU, SOURCE_ZHIHU),
+        (SOURCE_CAIXIN, SOURCE_CAIXIN),
+        (SOURCE_TECH_CONF, SOURCE_TECH_CONF),
+        (SOURCE_YOUTUBE, SOURCE_YOUTUBE),
+        (SOURCE_MOOC, SOURCE_MOOC),
+        (SOURCE_OTHER, SOURCE_OTHER),
+    )
+
     title = models.CharField(max_length=255, verbose_name="标题")
     slug = models.SlugField(max_length=255, verbose_name="slug", unique=True)
+    media_img = models.ForeignKey(UploadedImage, on_delete=models.SET_NULL, related_name="+", blank=True, null=True, verbose_name="封面配图")
+    video_iframe = models.TextField(blank=True, verbose_name="视频iframe")
+
+    type = models.CharField(max_length=255, choices=TYPE_CHOICES, default=TYPE_ARTICLE, verbose_name="类型")
+    source = models.CharField(max_length=255, choices=SOURCE_CHOICES, default=SOURCE_MINE, verbose_name="来源")
 
     is_published = models.BooleanField(default=False, verbose_name="已发表")
     time_published = models.DateTimeField(blank=True, null=True, verbose_name="发表时间")
     time_modified = models.DateTimeField(auto_now=True, verbose_name="修改时间")
     abstract_markdown = models.TextField(blank=True, verbose_name="摘要")
-    content_markdown = models.TextField(blank=True, verbose_name="正文")
+    content_markdown = models.TextField(verbose_name="正文")
 
-    related_links = models.ManyToManyField(RelatedLink, related_name="+")
+    related_links = models.ManyToManyField(RelatedLink, related_name="+", blank=True, verbose_name="相关链接")
+    related_files = models.ManyToManyField(UploadedFile, related_name="+", blank=True, verbose_name="附件")
 
     @property
     def abstract_html(self):
@@ -99,7 +157,7 @@ class Article(models.Model):
         super().save(force_insert, force_update, using, update_fields)
 
     def __str__(self):
-        return f'{self.title}'
+        return f'{self.type} {self.title}'
 
     class Meta:
         verbose_name = verbose_name_plural = "随笔"
@@ -108,9 +166,33 @@ class Article(models.Model):
 class Tweet(models.Model):
     text = models.TextField(blank=False, verbose_name="正文")
     image = models.ForeignKey(UploadedImage, on_delete=models.SET_NULL, related_name="+", blank=True, null=True, verbose_name="配图")
+    related_links = models.ManyToManyField(RelatedLink, related_name="+", blank=True, verbose_name="相关链接")
 
     create_at = models.DateTimeField(auto_now_add=True)
 
     @property
     def text_html(self):
         return convert_to_markdown(self.text)
+
+    class Meta:
+        verbose_name = verbose_name_plural = "碎碎念"
+
+
+class Task(models.Model):
+    TYPE_BOOK = "书"
+    TYPE_MOOC = "公开课"
+    TYPE_TECH_CONF = "技术演讲"
+
+    image = models.ForeignKey(UploadedImage, on_delete=models.SET_NULL, related_name="+", blank=True, null=True, verbose_name="配图")
+    related_links = models.ManyToManyField(RelatedLink, related_name="+", blank=True, verbose_name="相关链接")
+
+    cnt_current = models.IntegerField(verbose_name="当前进度")
+    cnt_total = models.IntegerField(verbose_name="总量")
+
+    detail_markdown = models.TextField(blank=True, verbose_name="详情")
+    related_files = models.ManyToManyField(UploadedFile, related_name="+", blank=True, verbose_name="附件")
+
+    time_modified = models.DateTimeField(auto_now=True, verbose_name="修改时间")
+
+    class Meta:
+        verbose_name = verbose_name_plural = "想学清单"

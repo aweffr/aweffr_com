@@ -36,3 +36,11 @@ jobs:
           ARGS: '-avz'
           TARGET: '/data/aweffr_com_prod'
           EXCLUDE: '/frontend/node_modules'
+      - name: restart gunicorn
+        uses: webfactory/ssh-agent@v0.5.2
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Setup knownhosts
+        run: ssh-keyscan aweffr.com >> ~/.ssh/known_hosts
+      - name: Run SSH Command
+        run: ssh aweffr@aweffr.com "lsof -i:9001 -t | xargs kill -SIGHUP"

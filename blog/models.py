@@ -25,7 +25,7 @@ def convert_to_markdown(text):
 
 
 class UploadedFile(models.Model):
-    slug = models.SlugField(max_length=255, verbose_name="slug", unique=True)
+    slug = models.SlugField(max_length=160, verbose_name="slug", unique=True)
     title = models.CharField(max_length=255, blank=True)
     file = models.FileField(upload_to="files/")
     create_at = models.DateTimeField(auto_now_add=True)
@@ -90,6 +90,9 @@ class RelatedLink(models.Model):
             return "youtube"
         return ""
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = verbose_name_plural = "相关链接"
 
@@ -130,8 +133,8 @@ class Article(models.Model):
     media_img = models.ForeignKey(UploadedImage, on_delete=models.SET_NULL, related_name="+", blank=True, null=True, verbose_name="封面配图")
     video_iframe = models.TextField(blank=True, verbose_name="视频iframe")
 
-    type = models.CharField(max_length=255, choices=TYPE_CHOICES, default=TYPE_ARTICLE, verbose_name="类型")
-    source = models.CharField(max_length=255, choices=SOURCE_CHOICES, default=SOURCE_MINE, verbose_name="来源")
+    type = models.CharField(max_length=160, choices=TYPE_CHOICES, default=TYPE_ARTICLE, verbose_name="类型")
+    source = models.CharField(max_length=160, choices=SOURCE_CHOICES, default=SOURCE_MINE, verbose_name="来源")
 
     is_published = models.BooleanField(default=False, verbose_name="已发表")
     time_published = models.DateTimeField(blank=True, null=True, verbose_name="发表时间")
@@ -174,6 +177,12 @@ class Tweet(models.Model):
     def text_html(self):
         return convert_to_markdown(self.text)
 
+    def __str__(self):
+        if len(self.text) > 25:
+            return self.text[:25] + "..."
+        else:
+            return self.text
+
     class Meta:
         verbose_name = verbose_name_plural = "碎碎念"
 
@@ -182,7 +191,17 @@ class Task(models.Model):
     TYPE_BOOK = "书"
     TYPE_MOOC = "公开课"
     TYPE_TECH_CONF = "技术演讲"
+    TYPE_OTHER = "其他"
 
+    TYPE_CHOICES = (
+        (TYPE_BOOK, TYPE_BOOK),
+        (TYPE_MOOC, TYPE_MOOC),
+        (TYPE_TECH_CONF, TYPE_TECH_CONF),
+        (TYPE_OTHER, TYPE_OTHER),
+    )
+
+    type = models.CharField(max_length=160, choices=TYPE_CHOICES, default=TYPE_OTHER)
+    title = models.CharField(max_length=255)
     image = models.ForeignKey(UploadedImage, on_delete=models.SET_NULL, related_name="+", blank=True, null=True, verbose_name="配图")
     related_links = models.ManyToManyField(RelatedLink, related_name="+", blank=True, verbose_name="相关链接")
 
@@ -193,6 +212,9 @@ class Task(models.Model):
     related_files = models.ManyToManyField(UploadedFile, related_name="+", blank=True, verbose_name="附件")
 
     time_modified = models.DateTimeField(auto_now=True, verbose_name="修改时间")
+
+    def __str__(self):
+        return f"{self.type} {self.title}"
 
     class Meta:
         verbose_name = verbose_name_plural = "学习"

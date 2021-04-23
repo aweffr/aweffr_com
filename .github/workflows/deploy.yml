@@ -1,0 +1,37 @@
+# deploy.yml
+name: "deploy-to-my-server"
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+      - run: yarn install
+        working-directory: frontend
+      - run: yarn build
+        working-directory: frontend
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - run: pip install -r requirements-base.txt
+      - run: python manage.py collectstatic
+        env:
+          DJANGO_SETTINGS_MODULE: 'mysite.settings.build'
+      - run: find .
+      - name: ssh deploy
+        uses: easingthemes/ssh-deploy@v2
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          ARGS: '-avz --delete'
+          TARGET: '/data/aweffr_com_test'
+          EXCLUDE: '/frontend/node_modules'

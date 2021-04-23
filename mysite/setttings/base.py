@@ -15,16 +15,13 @@ import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 env = environ.Env(
-    DEBUG=(bool, False),
     IMAGE_COMPRESS_QUALITY=(int, 90),
 )
 env.read_env()
 
 SECRET_KEY = env("SECRET_KEY")
-
-DEBUG = env("DEBUG")
 
 ADMIN_URL_SUFFIX = env("ADMIN_URL_SUFFIX")
 
@@ -134,23 +131,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATICFILES_DIRS = [
     BASE_DIR / "frontend" / "build"
 ]
-
-if DEBUG:
-    stats_file = "webpack-stats-dev.json"
-else:
-    stats_file = "webpack-stats-prod.json"
-
-WEBPACK_LOADER = {
-    'DEFAULT': {
-        'CACHE': not DEBUG,
-        'BUNDLE_DIR_NAME': 'webpack_bundle/',  # must end with slash
-        'STATS_FILE': Path(BASE_DIR) / 'frontend' / stats_file,
-        'POLL_INTERVAL': 0.2,
-        'TIMEOUT': None,
-        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
-        'LOADER_CLASS': 'webpack_loader.loader.WebpackLoader',
-    }
-}
 
 MEDIA_ROOT = os.path.join(str(BASE_DIR), 'media')
 MEDIA_URL = "/media/"

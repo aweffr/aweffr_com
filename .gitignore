@@ -2,15 +2,16 @@
 # Created by https://www.toptal.com/developers/gitignore/api/django,pycharm+all,react
 # Edit at https://www.toptal.com/developers/gitignore?templates=django,pycharm+all,react
 
-mysite/setttings/id_rsa
-mysite/setttings/id_rsa.pub
+mysite/settings/id_rsa
+mysite/settings/id_rsa.pub
 
 ### Django ###
-mysite/setttings/.env
-mysite/setttings/prod.env
+mysite/settings/.env
+mysite/settings/prod.env
 backup-*.tar.gz
 
 staticfiles/
+static/
 
 *.log
 *.pot

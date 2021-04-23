@@ -2,6 +2,10 @@ from .base import *
 
 DEBUG = True
 
+DATABASES = {
+    'default': env.db(),
+}
+
 WEBPACK_LOADER = {
     'DEFAULT': {
         'CACHE': False,

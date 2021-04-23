@@ -18,6 +18,9 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 env = environ.Env(
     IMAGE_COMPRESS_QUALITY=(int, 90),
+    EMAIL_HOST_USER=(str, ''),
+    EMAIL_HOST_PASSWORD=(str, ''),
+    ADMIN_URL_SUFFIX=(str, ''),
 )
 env.read_env()
 
@@ -83,10 +86,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
-
-DATABASES = {
-    'default': env.db(),
-}
 
 AUTH_PASSWORD_VALIDATORS = [
     {

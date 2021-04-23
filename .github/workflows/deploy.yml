@@ -22,16 +22,17 @@ jobs:
         with:
           python-version: '3.8'
       - run: pip install -r requirements-base.txt
+      - run: touch mysite/settings/.env
       - run: python manage.py collectstatic
         env:
           DJANGO_SETTINGS_MODULE: 'mysite.settings.build'
-      - run: find .
+          SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY_FOR_BUILD }}
       - name: ssh deploy
-        uses: easingthemes/ssh-deploy@v2
+        uses: easingthemes/ssh-deploy@v2.1.6
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          ARGS: '-avz --delete'
+          ARGS: '-avz'
           TARGET: '/data/aweffr_com_test'
           EXCLUDE: '/frontend/node_modules'

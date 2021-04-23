@@ -22,7 +22,11 @@ env = environ.Env(
     EMAIL_HOST_PASSWORD=(str, ''),
     ADMIN_URL_SUFFIX=(str, ''),
 )
-env.read_env()
+
+if Path("/etc/aweffr_com/.env").exists():
+    env.read_env("/etc/aweffr_com/.env")
+else:
+    env.read_env()
 
 SECRET_KEY = env("SECRET_KEY")
 

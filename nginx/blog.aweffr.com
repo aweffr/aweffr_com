@@ -55,7 +55,7 @@ server {
   }
 
   location /static/ {
-    root /data/aweffr_com;
+    root /data/aweffr_com_prod;
   }
 
   location /media/protected/ {

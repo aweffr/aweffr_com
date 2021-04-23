@@ -5,6 +5,7 @@
 ### Django ###
 mysite/.env
 mysite/prod.env
+backup-*.tar.gz
 
 staticfiles/
 

@@ -23,7 +23,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ['主要', {
-            'fields': ('title', 'slug', 'media_img', 'type', 'source', 'is_published', 'content_markdown'),
+            'fields': ('title', 'slug', 'media_img', ('type', 'source'), 'is_published', 'content_markdown'),
         }],
         ['补充', {
             'classes': ('collapse',),  # CSS

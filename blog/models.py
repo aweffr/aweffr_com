@@ -195,4 +195,4 @@ class Task(models.Model):
     time_modified = models.DateTimeField(auto_now=True, verbose_name="修改时间")
 
     class Meta:
-        verbose_name = verbose_name_plural = "想学清单"
+        verbose_name = verbose_name_plural = "学习"

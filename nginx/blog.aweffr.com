@@ -60,11 +60,11 @@ server {
 
   location /media/protected/ {
     internal;
-    root /data/aweffr_com;
+    root /data/aweffr_com_media;
   }
 
   location /media/ {
-    root /data/aweffr_com;
+    root /data/aweffr_com_media;
   }
 
   location / {

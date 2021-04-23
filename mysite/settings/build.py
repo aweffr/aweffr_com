@@ -2,10 +2,12 @@ from .base import *
 
 DEBUG = False
 
+MEDIA_ROOT = os.path.join(str(BASE_DIR), 'media')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'sqlite3',
+        'NAME': 'sqlite3.db',
     }
 }
 

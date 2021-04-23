@@ -2,6 +2,9 @@ from .base import *
 
 DEBUG = False
 
+# noinspection PyUnresolvedReferences
+MEDIA_ROOT = "/data/aweffr_com_media/media"
+
 DATABASES = {
     'default': env.db(),
 }

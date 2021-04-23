@@ -26,9 +26,13 @@ class Command(BaseCommand):
 
         output_tar = f"backup-{dt}.tar.gz"
 
+        media_root = settings.MEDIA_ROOT
+        if not media_root.endswith("/"):
+            media_root = media_root + "/"
+
         with tarfile.open(output_tar, "w:gz") as t:
             t.add(output_db, arcname=f"./backup-{dt}/" + output_db)
-            t.add("./media/", arcname=f"./backup-{dt}/media/")
+            t.add(media_root, arcname=f"./backup-{dt}/media/")
         os.remove(output_db)
 
         if send_email:

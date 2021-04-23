@@ -131,7 +131,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "frontend" / "build"
 ]
 
-MEDIA_ROOT = os.path.join(str(BASE_DIR), 'media')
 MEDIA_URL = "/media/"
 
 REST_FRAMEWORK = {

@@ -2,6 +2,8 @@ from .base import *
 
 DEBUG = True
 
+MEDIA_ROOT = os.path.join(str(BASE_DIR), 'media')
+
 DATABASES = {
     'default': env.db(),
 }

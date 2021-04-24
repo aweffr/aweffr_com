@@ -10,3 +10,10 @@ python环境 3.8
 - `cd /data/aweffr_com_prod && pip install -r requirements.txt`
 - `export DJANGO_SETTINGS_MODULE=mysite.settings.prod`
 - `cd /data/aweffr_com_prod && gunicorn mysite.wsgi --bind 127.0.0.1:9001 --workers 3`
+
+
+## 参考使用gthread压测结果后的启动方式
+
+https://yunsonbai.top/2017/06/15/gunicorn-django/
+
+- `gunicorn mysite.wsgi -w 3 -b 127.0.0.1:9001 -k gthread --threads 4`

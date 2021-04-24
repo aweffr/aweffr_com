@@ -19,3 +19,7 @@ WEBPACK_LOADER = {
         'LOADER_CLASS': 'webpack_loader.loader.WebpackLoader',
     }
 }
+
+INTERNAL_IPS = [
+    '127.0.0.1'
+]

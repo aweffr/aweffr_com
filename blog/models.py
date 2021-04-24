@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import models
 import uuid
@@ -130,6 +131,7 @@ class Article(models.Model):
 
     title = models.CharField(max_length=255, verbose_name="标题")
     slug = models.SlugField(max_length=255, verbose_name="slug", unique=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     media_img = models.ForeignKey(UploadedImage, on_delete=models.SET_NULL, related_name="+", blank=True, null=True, verbose_name="封面配图")
     video_iframe = models.TextField(blank=True, verbose_name="视频iframe")
 

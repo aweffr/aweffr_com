@@ -17,6 +17,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 env = environ.Env(
+    LOG_DB_SQL=(bool, False),
     IMAGE_COMPRESS_QUALITY=(int, 90),
     EMAIL_HOST_USER=(str, ''),
     EMAIL_HOST_PASSWORD=(str, ''),
@@ -151,3 +152,5 @@ EMAIL_PORT = 587
 
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+
+LOG_DB_SQL = env("LOG_DB_SQL")

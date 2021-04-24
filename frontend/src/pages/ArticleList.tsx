@@ -13,7 +13,7 @@ const ArticleRow = ({article}: {article: ArticleBaseDto}) => {
       <h1 className="article-title">
         <a className="article-title-anchor" href={`/article/${article.slug}/`}>{article.title}</a>
       </h1>
-      <div className="my-2 article-time">更新时间: {timeDisplay}</div>
+      <div className="my-3 article-time">更新时间: {timeDisplay}</div>
       <div className="my-2" dangerouslySetInnerHTML={{__html: article.abstract_html}}/>
     </div>
   );

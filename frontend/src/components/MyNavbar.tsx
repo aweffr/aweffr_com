@@ -4,8 +4,8 @@ import {Collapse, Container, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, N
 const MyNavLink = ({href, children}: {href: string, children: string}) => {
   const isActive = window.location.pathname.includes(href);
   return (
-    <NavLink className={"my-nav-link " + (isActive ? "nav-active" : "nav-inactive")} href={href}>{children}</NavLink>
-  )
+    <NavLink className={'my-nav-link ' + (isActive ? 'nav-active' : 'nav-inactive')} href={href}>{children}</NavLink>
+  );
 };
 
 const MyNavbar: React.FC = () => {
@@ -43,6 +43,6 @@ const MyNavbar: React.FC = () => {
       </Navbar>
     </div>
   );
-}
+};
 
 export default MyNavbar;

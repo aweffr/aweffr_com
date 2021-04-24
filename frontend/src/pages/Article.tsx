@@ -1,10 +1,10 @@
 import React from 'react';
-import {ArticleDto} from "../dto/serializer";
-import {Container} from "reactstrap";
+import {ArticleDto} from '../dto/serializer';
+import {Container} from 'reactstrap';
 
 
 const Article = () => {
-  const data: ArticleDto = JSON.parse(document.getElementById("article_data")!.innerText);
+  const data: ArticleDto = JSON.parse(document.getElementById('article_data')!.innerText);
 
   return (
     <Container>
@@ -15,8 +15,10 @@ const Article = () => {
             <h2>参考链接</h2>
             <ul>
               {
-                data.related_links.map(link => (
-                  <li key={link.id}><a href={link.link}>{link.name}</a></li>
+                data.related_links.map((link) => (
+                  <li key={link.id}>
+                    <a href={link.link}>{link.name}</a>
+                  </li>
                 ))
               }
             </ul>

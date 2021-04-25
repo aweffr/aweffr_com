@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 export interface UploadedFileDto {
     id?: number;
     slug: string;

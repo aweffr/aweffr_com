@@ -15,3 +15,10 @@ class Command(BaseCommand):
             dst_dir.mkdir(parents=True)
         dst = dst_dir / "serializer.ts"
         generate_ts(dst, trim_serializer_output=True)
+
+        with open(dst, "r") as f:
+            content = f.read()
+
+        content = "/* eslint-disable camelcase */\n\n" + content
+        with open(dst, "w") as f:
+            f.write(content)

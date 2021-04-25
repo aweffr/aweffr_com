@@ -17,7 +17,7 @@ def get_uploaded_filename(instance, filename):
     return path
 
 
-def convert_to_markdown(text):
+def convert_markdown_to_html(text):
     html = markdown.markdown(text, extensions=['markdown.extensions.fenced_code'])
     soup = bs4.BeautifulSoup(html, "html.parser")
     for tag in soup.find_all("img"):
@@ -149,11 +149,11 @@ class Article(models.Model):
 
     @property
     def abstract_html(self):
-        return convert_to_markdown(self.abstract_markdown)
+        return convert_markdown_to_html(self.abstract_markdown)
 
     @property
     def content_html(self):
-        return convert_to_markdown(self.content_markdown)
+        return convert_markdown_to_html(self.content_markdown)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if self.is_published and self.time_published is None:
@@ -177,7 +177,9 @@ class Tweet(models.Model):
 
     @property
     def text_html(self):
-        return convert_to_markdown(self.text)
+        if self.text == "":
+            return ""
+        return convert_markdown_to_html(self.text)
 
     def __str__(self):
         if len(self.text) > 25:
@@ -211,9 +213,18 @@ class Task(models.Model):
     cnt_total = models.IntegerField(verbose_name="总量")
 
     detail_markdown = models.TextField(blank=True, verbose_name="详情")
+    review_markdown = models.TextField(blank=True, verbose_name="评论")
     related_files = models.ManyToManyField(UploadedFile, related_name="+", blank=True, verbose_name="附件")
 
     time_modified = models.DateTimeField(auto_now=True, verbose_name="修改时间")
+
+    @property
+    def detail_html(self):
+        return convert_markdown_to_html(self.detail_markdown)
+
+    @property
+    def review_html(self):
+        return convert_markdown_to_html(self.review_markdown)
 
     def __str__(self):
         return f"{self.type} {self.title}"

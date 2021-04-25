@@ -16,7 +16,7 @@ const MyNavbar: React.FC = () => {
     <div>
       <Navbar color="light" light expand="md">
         <Container>
-          <NavbarBrand href="/">aweffr的小站</NavbarBrand>
+          <NavbarBrand href="/">aweffr的小屋</NavbarBrand>
           <NavbarToggler onClick={toggle}/>
           <Collapse isOpen={isOpen} navbar>
             <Nav className="mr-auto" navbar>

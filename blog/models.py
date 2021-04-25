@@ -6,6 +6,7 @@ from django.db import models
 import uuid
 import markdown
 from PIL import Image
+from django.urls import reverse
 from django.utils.timezone import localtime
 from django.utils import timezone
 import bs4
@@ -48,8 +49,19 @@ class UploadedImage(models.Model):
     class Meta:
         verbose_name = verbose_name_plural = "图片"
 
+    @property
+    def url(self):
+        return reverse("view_image", kwargs={"slug": self.id})
+
+    @property
+    def title_or_empty(self):
+        if self.title:
+            return self.title
+        else:
+            return "无标题"
+
     def __str__(self):
-        return f'<图片 create_at={localtime(self.create_at)}>'
+        return f'{self.title_or_empty} {localtime(self.create_at)}'
 
     def get_with_size(self, size: int):
         name, ext = os.path.splitext(self.image.name)
@@ -191,7 +203,7 @@ class Tweet(models.Model):
         verbose_name = verbose_name_plural = "碎碎念"
 
 
-class Task(models.Model):
+class StudySubject(models.Model):
     TYPE_BOOK = "书"
     TYPE_MOOC = "公开课"
     TYPE_TECH_CONF = "技术演讲"
@@ -220,10 +232,14 @@ class Task(models.Model):
 
     @property
     def detail_html(self):
+        if self.detail_markdown == "":
+            return ""
         return convert_markdown_to_html(self.detail_markdown)
 
     @property
     def review_html(self):
+        if self.review_markdown == "":
+            return ""
         return convert_markdown_to_html(self.review_markdown)
 
     def __str__(self):

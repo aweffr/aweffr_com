@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
-from .models import Article, RelatedLink, UploadedFile, UploadedImage
+from .models import Article, RelatedLink, UploadedFile, UploadedImage, StudySubject
 from django_typomatic import ts_interface
 
 
@@ -46,4 +46,19 @@ class ArticleSerializer(ModelSerializer):
 
     class Meta:
         model = Article
+        fields = '__all__'
+
+
+@ts_interface()
+class StudySubjectSerializer(ModelSerializer):
+    image = UploadedImageSerializer(allow_null=True)
+
+    related_links = RelatedLinkSerializer(many=True)
+    related_files = UploadedFileSerializer(many=True)
+
+    detail_html = serializers.CharField(read_only=True)
+    review_html = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = StudySubject
         fields = '__all__'

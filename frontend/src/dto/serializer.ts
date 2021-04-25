@@ -47,5 +47,22 @@ export interface ArticleDto {
     time_modified?: string;
     abstract_markdown?: string;
     content_markdown: string;
+    author?: any | null;
+}
+
+export interface StudySubjectDto {
+    id?: number;
+    image: UploadedImageDto | null;
+    related_links: RelatedLinkDto[];
+    related_files: UploadedFileDto[];
+    detail_html?: string;
+    review_html?: string;
+    type?: any;
+    title: string;
+    cnt_current: number;
+    cnt_total: number;
+    detail_markdown?: string;
+    review_markdown?: string;
+    time_modified?: string;
 }
 

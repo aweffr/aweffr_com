@@ -3,7 +3,7 @@ import logging
 from django.contrib import admin
 from django.http import HttpRequest
 
-from .models import UploadedFile, UploadedImage, RelatedLink, Article, Tweet, Task
+from .models import UploadedFile, UploadedImage, RelatedLink, Article, Tweet, StudySubject
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,8 @@ class UploadedFileAdmin(admin.ModelAdmin):
 
 @admin.register(UploadedImage)
 class UploadedImageAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("title_or_empty", "url")
+    readonly_fields = ("id", "url")
 
 
 @admin.register(RelatedLink)
@@ -49,6 +50,6 @@ class TweetAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(Task)
+@admin.register(StudySubject)
 class TaskAdmin(admin.ModelAdmin):
     pass

@@ -50,4 +50,12 @@
   .article-time {
     font-style: italic;
   }
+
+  .study-subject-row {
+    padding: 0.5rem;
+
+    &:not(:last-child) {
+      border-bottom: 2px solid darken(#FFFFFF, 5);
+    }
+  }
 }

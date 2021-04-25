@@ -7,7 +7,7 @@ const Article = () => {
   const data: ArticleDto = JSON.parse(document.getElementById('article_data')!.innerText);
 
   return (
-    <Container>
+    <Container className="mb-4">
       <main className="my-3" dangerouslySetInnerHTML={{__html: data.content_html}}/>
       {
         data.related_links.length > 0 && (

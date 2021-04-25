@@ -8,7 +8,7 @@ urlpatterns = [
     path("article/", views.view_article_list),
 
     path("study/<str:slug>/", views.view_study),
-    path("study/", views.view_study_list),
+    path("study/", views.view_study_subject_list),
 
     path("archive/<str:slug>/", views.view_archive),
     path("archive/", views.view_archive_list),
@@ -17,5 +17,5 @@ urlpatterns = [
     path("tweet/", views.view_tweet_list),
     path("tool/", views.view_tool_list),
 
-    path("image/<str:slug>/", views.view_image)
+    path("image/<str:slug>/", views.view_image, name="view_image")
 ]

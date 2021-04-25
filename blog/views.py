@@ -5,8 +5,8 @@ from django.shortcuts import render, get_object_or_404
 from django.views.static import serve
 from django.conf import settings
 
-from .models import Article, UploadedImage
-from .serializers import ArticleBaseSerializer, ArticleSerializer
+from .models import Article, UploadedImage, StudySubject
+from .serializers import ArticleBaseSerializer, ArticleSerializer, StudySubjectSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +37,7 @@ def view_image(request, slug):
 
 
 def view_article_list(request):
-    article_list = Article.objects.filter(is_published=True).all()
+    article_list = Article.objects.filter(type=Article.TYPE_ARTICLE).filter(is_published=True).order_by("-time_published").all()
     serializer = ArticleBaseSerializer(article_list, many=True)
     return render(request, "blog/article_list.html", context={
         "article_list_data": serializer.data,
@@ -49,12 +49,18 @@ def view_article(request, slug):
     serializer = ArticleSerializer(article)
 
     return render(request, "blog/article.html", context={
-        'article_data': serializer.data,
+        "article": article,
+        "article_data": serializer.data,
     })
 
 
-def view_study_list(request):
-    return render(request, "blog/study_list.html")
+def view_study_subject_list(request):
+    subject_list = StudySubject.objects.all()
+    serializer = StudySubjectSerializer(subject_list, many=True)
+    return render(request, "blog/study_subject_list.html", context={
+        "subject_list": subject_list,
+        "subject_list_data": serializer.data,
+    })
 
 
 def view_study(request, slug):

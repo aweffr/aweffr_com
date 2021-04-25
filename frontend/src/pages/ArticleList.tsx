@@ -23,7 +23,7 @@ const ArticleList = () => {
   const data: ArticleBaseDto[] = JSON.parse(document.getElementById('article_list_data')!.innerText);
 
   return (
-    <Container>
+    <Container className="mb-4">
       {
         data.map((article) => (
           <ArticleRow key={article.id} article={article}/>

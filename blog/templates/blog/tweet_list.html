@@ -1,9 +1,9 @@
 {% extends "blog/base.html" %}
 
-{% block title %}
-    碎碎念
-{% endblock %}
+{% block title %}碎碎念 - {% endblock %}
 
 {% block content %}
     <div id="root"></div>
+
+    {{ tweet_list_data|json_script:"tweet_list_data" }}
 {% endblock %}

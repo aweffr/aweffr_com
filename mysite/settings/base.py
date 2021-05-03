@@ -133,7 +133,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_ROOT = BASE_DIR / 'static'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATICFILES_DIRS = [
-    BASE_DIR / "frontend" / "build"
+    BASE_DIR / "frontend" / "build",
+    BASE_DIR / "blog" / "my_static_files",
 ]
 
 MEDIA_URL = "/media/"

@@ -3,6 +3,7 @@ import MyNavbar from './components/MyNavbar';
 import ArticleList from './pages/ArticleList';
 import Article from './pages/Article';
 import StudyIndex from './pages/study/StudyIndex';
+import TweetIndex from './pages/tweet/TweetIndex';
 
 function App() {
   let Component: any = () => null;
@@ -12,6 +13,8 @@ function App() {
     Component = Article;
   } else if (window.location.pathname.endsWith('/study/')) {
     Component = StudyIndex;
+  } else if (window.location.pathname.endsWith('/tweet/')) {
+    Component = TweetIndex;
   }
   return (
     <div className="App">

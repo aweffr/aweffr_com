@@ -1,10 +1,9 @@
 {% extends "blog/base.html" %}
 
-{% block title %}
-    学习
-{% endblock %}
+{% block title %}学习 - {% endblock %}
 
 {% block content %}
     <div id="root"></div>
+
     {{ subject_list_data|json_script:"subject_list_data" }}
 {% endblock %}

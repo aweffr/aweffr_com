@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
-from .models import Article, RelatedLink, UploadedFile, UploadedImage, StudySubject
+from .models import Article, RelatedLink, UploadedFile, UploadedImage, StudySubject, Tweet
 from django_typomatic import ts_interface
 
 
@@ -13,6 +13,8 @@ class UploadedFileSerializer(ModelSerializer):
 
 @ts_interface()
 class UploadedImageSerializer(ModelSerializer):
+    url = serializers.CharField(read_only=True)
+
     class Meta:
         model = UploadedImage
         fields = "__all__"
@@ -61,4 +63,14 @@ class StudySubjectSerializer(ModelSerializer):
 
     class Meta:
         model = StudySubject
+        fields = '__all__'
+
+
+@ts_interface()
+class TweetSerializer(ModelSerializer):
+    image = UploadedImageSerializer(allow_null=True)
+    text_html = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = Tweet
         fields = '__all__'

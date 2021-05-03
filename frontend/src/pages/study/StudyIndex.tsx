@@ -15,14 +15,14 @@ const StudyIndex = () => {
             </h1>
             <div dangerouslySetInnerHTML={{__html: subject.detail_html!}}/>
             <div className="related-links">
-              <h2 className="text-secondary">相关链接</h2>
-              <ul>
+              <h5 className="text-secondary">相关链接</h5>
+              <ol>
                 {
                   subject.related_links.map((link) => (
-                    <li key={link.id}><a href={link.link}>{link.name || link.link}</a></li>
+                    <li key={link.id}><a href={link.link} target="_blank" rel="noreferrer">{link.name || link.link}</a></li>
                   ))
                 }
-              </ul>
+              </ol>
             </div>
             {
               subject.cnt_current > 0 && (

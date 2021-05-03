@@ -1,28 +1,31 @@
+/* eslint-disable camelcase */
+
 export interface UploadedFileDto {
-    id?: number;
+    id: number;
     slug: string;
     title?: string;
     file: any;
-    create_at?: string;
+    create_at: string;
 }
 
 export interface UploadedImageDto {
-    id?: string;
+    id: string;
+    url: string;
     title?: string;
     image: any;
     width?: number | null;
     height?: number | null;
-    create_at?: string;
+    create_at: string;
 }
 
 export interface RelatedLinkDto {
-    id?: number;
+    id: number;
     name: string;
     link: string;
 }
 
 export interface ArticleBaseDto {
-    id?: number;
+    id: number;
     title: string;
     slug: string;
     abstract_html: string;
@@ -31,7 +34,7 @@ export interface ArticleBaseDto {
 }
 
 export interface ArticleDto {
-    id?: number;
+    id: number;
     abstract_html: string;
     content_html: string;
     media_img: UploadedImageDto | null;
@@ -44,25 +47,36 @@ export interface ArticleDto {
     source?: any;
     is_published?: boolean;
     time_published?: string | null;
-    time_modified?: string;
+    time_modified: string;
     abstract_markdown?: string;
     content_markdown: string;
     author?: any | null;
+    study_subject?: any | null;
 }
 
 export interface StudySubjectDto {
-    id?: number;
+    id: number;
     image: UploadedImageDto | null;
     related_links: RelatedLinkDto[];
     related_files: UploadedFileDto[];
-    detail_html?: string;
-    review_html?: string;
+    detail_html: string;
+    review_html: string;
     type?: any;
     title: string;
     cnt_current: number;
     cnt_total: number;
     detail_markdown?: string;
     review_markdown?: string;
-    time_modified?: string;
+    time_modified: string;
+}
+
+export interface TweetDto {
+    id: number;
+    image: UploadedImageDto | null;
+    text_html: string;
+    text: string;
+    is_public?: boolean;
+    create_at: string;
+    related_links?: any[];
 }
 

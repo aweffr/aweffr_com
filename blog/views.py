@@ -5,8 +5,8 @@ from django.shortcuts import render, get_object_or_404
 from django.views.static import serve
 from django.conf import settings
 
-from .models import Article, UploadedImage, StudySubject
-from .serializers import ArticleBaseSerializer, ArticleSerializer, StudySubjectSerializer
+from .models import Article, UploadedImage, StudySubject, Tweet
+from .serializers import ArticleBaseSerializer, ArticleSerializer, StudySubjectSerializer, TweetSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -80,7 +80,15 @@ def view_todo_list(request):
 
 
 def view_tweet_list(request):
-    return render(request, "blog/tweet_list.html")
+    qs = Tweet.objects.get_queryset()
+    if not request.user.is_authenticated:
+        qs = qs.filter(is_public=True)
+    tweet_list = qs.all()
+    serializer = TweetSerializer(tweet_list, many=True)
+    return render(request, "blog/tweet_list.html", {
+        "tweet_list": tweet_list,
+        "tweet_list_data": serializer.data,
+    })
 
 
 def view_tool_list(request):

@@ -106,6 +106,8 @@ def __process_field(field_name, field, context, serializer, trim_serializer_outp
     return (field_name, ts_type)
 
 
+# TODO: 区分 input 和 output 的场景
+#   先调整满足 output
 def __get_ts_interface(serializer, context, trim_serializer_output):
     '''
     Generates and returns a Typescript Interface by iterating
@@ -126,7 +128,7 @@ def __get_ts_interface(serializer, context, trim_serializer_output):
         property, type = __process_field(
             key, value, context, serializer, trim_serializer_output)
 
-        if value.read_only or not value.required:
+        if not value.read_only and not value.required:
             property = property + "?"
 
         if value.allow_null:

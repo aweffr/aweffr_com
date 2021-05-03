@@ -149,6 +149,10 @@ class Article(models.Model):
 
     type = models.CharField(max_length=160, choices=TYPE_CHOICES, default=TYPE_ARTICLE, verbose_name="类型")
     source = models.CharField(max_length=160, choices=SOURCE_CHOICES, default=SOURCE_MINE, verbose_name="来源")
+    study_subject = models.ForeignKey(
+        "blog.StudySubject", related_name="notes",
+        on_delete=models.SET_NULL, blank=True, null=True,
+        verbose_name="课题")
 
     is_published = models.BooleanField(default=False, verbose_name="已发表")
     time_published = models.DateTimeField(blank=True, null=True, verbose_name="发表时间")
@@ -184,6 +188,7 @@ class Tweet(models.Model):
     text = models.TextField(blank=False, verbose_name="正文")
     image = models.ForeignKey(UploadedImage, on_delete=models.SET_NULL, related_name="+", blank=True, null=True, verbose_name="配图")
     related_links = models.ManyToManyField(RelatedLink, related_name="+", blank=True, verbose_name="相关链接")
+    is_public = models.BooleanField(verbose_name="公开", default=True)
 
     create_at = models.DateTimeField(auto_now_add=True)
 
@@ -200,6 +205,7 @@ class Tweet(models.Model):
             return self.text
 
     class Meta:
+        ordering = ("-create_at",)
         verbose_name = verbose_name_plural = "碎碎念"
 
 

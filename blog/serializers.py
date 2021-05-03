@@ -70,7 +70,9 @@ class StudySubjectSerializer(ModelSerializer):
 class TweetSerializer(ModelSerializer):
     image = UploadedImageSerializer(allow_null=True)
     text_html = serializers.CharField(read_only=True)
+    username = serializers.CharField(read_only=True)
+    user_avatar = UploadedImageSerializer(read_only=True)
 
     class Meta:
         model = Tweet
-        fields = '__all__'
+        exclude = ['user']

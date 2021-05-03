@@ -3,9 +3,14 @@ import logging
 from django.contrib import admin
 from django.http import HttpRequest
 
-from .models import UploadedFile, UploadedImage, RelatedLink, Article, Tweet, StudySubject
+from .models import UploadedFile, UploadedImage, RelatedLink, Article, Tweet, StudySubject, Profile
 
 logger = logging.getLogger(__name__)
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    pass
 
 
 @admin.register(UploadedFile)

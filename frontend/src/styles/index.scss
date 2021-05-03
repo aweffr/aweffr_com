@@ -58,4 +58,12 @@
       border-bottom: 2px solid darken(#FFFFFF, 5);
     }
   }
+
+  .tweet {
+    padding: 0.5rem;
+
+    &:not(:last-child) {
+      border-bottom: 2px solid darken(#FFFFFF, 5);
+    }
+  }
 }

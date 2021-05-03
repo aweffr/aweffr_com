@@ -74,6 +74,8 @@ export interface TweetDto {
     id: number;
     image: UploadedImageDto | null;
     text_html: string;
+    username: string;
+    user_avatar: UploadedImageDto;
     text: string;
     is_public?: boolean;
     create_at: string;

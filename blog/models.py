@@ -26,6 +26,17 @@ def convert_markdown_to_html(text):
     return soup.prettify()
 
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    avatar = models.ForeignKey("blog.UploadedImage", on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.user.username}的用户资料'
+
+    class Meta:
+        verbose_name = verbose_name_plural = "用户资料"
+
+
 class UploadedFile(models.Model):
     slug = models.SlugField(max_length=160, verbose_name="slug", unique=True)
     title = models.CharField(max_length=255, blank=True)
@@ -189,7 +200,7 @@ class Tweet(models.Model):
     image = models.ForeignKey(UploadedImage, on_delete=models.SET_NULL, related_name="+", blank=True, null=True, verbose_name="配图")
     related_links = models.ManyToManyField(RelatedLink, related_name="+", blank=True, verbose_name="相关链接")
     is_public = models.BooleanField(verbose_name="公开", default=True)
-
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=False, null=True, related_name='tweets')
     create_at = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -197,6 +208,14 @@ class Tweet(models.Model):
         if self.text == "":
             return ""
         return convert_markdown_to_html(self.text)
+
+    @property
+    def username(self):
+        return self.user.username
+
+    @property
+    def user_avatar(self):
+        return self.user.profile.avatar
 
     def __str__(self):
         if len(self.text) > 25:

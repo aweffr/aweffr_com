@@ -80,7 +80,7 @@ def view_todo_list(request):
 
 
 def view_tweet_list(request):
-    qs = Tweet.objects.get_queryset()
+    qs = Tweet.objects.get_queryset().select_related("user__profile")
     if not request.user.is_authenticated:
         qs = qs.filter(is_public=True)
     tweet_list = qs.all()

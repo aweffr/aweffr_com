@@ -61,9 +61,36 @@
 
   .tweet {
     padding: 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
 
     &:not(:last-child) {
       border-bottom: 2px solid darken(#FFFFFF, 5);
     }
+
+    .tweet-avatar-container {
+      max-width: 100px;
+      width: 15%;
+
+      & img {
+        width: 100%;
+        border-radius: 50%;
+      }
+    }
+
+    .tweet-content-container {
+      flex-grow: 1;
+      margin-left: 1rem;
+    }
+
+    .tweet-image {
+      max-width: 560px;
+
+      & img {
+        width: 100%;
+      }
+    }
+
   }
 }

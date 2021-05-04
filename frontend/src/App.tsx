@@ -4,10 +4,18 @@ import ArticleList from './pages/ArticleList';
 import Article from './pages/Article';
 import StudyIndex from './pages/study/StudyIndex';
 import TweetIndex from './pages/tweet/TweetIndex';
+import ArchiveIndex from './pages/archive/ArchiveIndex';
+import Archive from './pages/archive/Archive';
 
 function App() {
   let Component: any = () => null;
-  if (window.location.pathname.endsWith('/article/')) {
+  if (window.location.pathname.includes('/archive/')) {
+    if (window.location.pathname.endsWith('/archive/')) {
+      Component = ArchiveIndex;
+    } else {
+      Component = Archive;
+    }
+  } else if (window.location.pathname.endsWith('/article/')) {
     Component = ArticleList;
   } else if (window.location.pathname.includes('/article/')) {
     Component = Article;

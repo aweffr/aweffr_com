@@ -8,4 +8,6 @@
 
 {% block content %}
     <div id="root"></div>
+    {{ serializer_article_list_data|json_script:"serializer_article_list_data" }}
+    {{ serializer_tweet_list_data|json_script:"serializer_tweet_list_data" }}
 {% endblock %}

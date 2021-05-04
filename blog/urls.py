@@ -1,5 +1,9 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register("archives", views.ArchiveViewSet)
 
 urlpatterns = [
     path("", views.index),
@@ -17,5 +21,7 @@ urlpatterns = [
     path("tweet/", views.view_tweet_list),
     path("tool/", views.view_tool_list),
 
-    path("image/<str:slug>/", views.view_image, name="view_image")
+    path("image/<str:slug>/", views.view_image, name="view_image"),
+
+    path("api/", include(router.urls))
 ]

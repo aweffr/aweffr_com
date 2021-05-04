@@ -1,9 +1,8 @@
 {% extends "blog/base.html" %}
 
-{% block title %}
-    归档
-{% endblock %}
+{% block title %}收藏 - {% endblock %}
 
 {% block content %}
     <div id="root"></div>
+    {{ archive_list_data|json_script:"archive_list_data" }}
 {% endblock %}

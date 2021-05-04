@@ -1,14 +1,13 @@
 import React from 'react';
-import {ArticleDto} from '../dto/serializer';
+import {ArticleDto} from '../../dto/serializer';
 import {Container} from 'reactstrap';
-import RelatedLinkList from '../components/RelatedLinkList';
+import RelatedLinkList from '../../components/RelatedLinkList';
 
-
-const Article = () => {
-  const data: ArticleDto = JSON.parse(document.getElementById('article_data')!.innerText);
+const Archive = () => {
+  const data: ArticleDto = JSON.parse(document.getElementById('archive_data')!.innerText);
 
   return (
-    <Container className="mb-4">
+    <Container className="mb-5">
       <main className="my-3" dangerouslySetInnerHTML={{__html: data.content_html}}/>
       {
         data.related_links.length > 0 && (
@@ -22,4 +21,4 @@ const Article = () => {
   );
 };
 
-export default Article;
+export default Archive;

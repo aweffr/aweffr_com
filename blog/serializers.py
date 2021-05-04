@@ -34,7 +34,7 @@ class ArticleBaseSerializer(ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ("id", "title", "slug", "abstract_html", "time_published", "media_img")
+        fields = ("id", "title", "slug", "type", "abstract_html", "time_published", "media_img")
 
 
 @ts_interface()

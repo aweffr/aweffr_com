@@ -28,6 +28,7 @@ export interface ArticleBaseDto {
     id: number;
     title: string;
     slug: string;
+    type?: any;
     abstract_html: string;
     time_published?: string | null;
     media_img: UploadedImageDto | null;

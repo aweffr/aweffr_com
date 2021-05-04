@@ -4,15 +4,29 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.static import serve
 from django.conf import settings
+from rest_framework.decorators import action
+from rest_framework.request import Request
+from rest_framework.response import Response
 
 from .models import Article, UploadedImage, StudySubject, Tweet
 from .serializers import ArticleBaseSerializer, ArticleSerializer, StudySubjectSerializer, TweetSerializer
+
+from rest_framework import viewsets, authentication, permissions
 
 logger = logging.getLogger(__name__)
 
 
 def index(request):
-    return render(request, "blog/index.html", context={})
+    articles = Article.objects.filter(is_published=True).order_by("-time_published").all()
+    tweets = Tweet.objects.order_by("-create_at").all()
+
+    serializer_article_list = ArticleBaseSerializer(articles, many=True)
+    serializer_tweet_list = TweetSerializer(tweets, many=True)
+
+    return render(request, "blog/index.html", context={
+        "serializer_article_list_data": serializer_article_list.data,
+        "serializer_tweet_list_data": serializer_tweet_list.data,
+    })
 
 
 def view_image(request, slug):
@@ -68,11 +82,22 @@ def view_study(request, slug):
 
 
 def view_archive_list(request):
-    return render(request, "blog/archive_list.html")
+    archive_list = Article.objects.filter(type=Article.TYPE_ARCHIVE).filter(is_published=True).order_by("-time_published").all()
+    serializer = ArticleBaseSerializer(archive_list, many=True)
+
+    return render(request, "blog/archive_list.html", {
+        "archive_list_data": serializer.data,
+    })
 
 
 def view_archive(request, slug):
-    return render(request, "blog/archive.html")
+    archive = get_object_or_404(Article, type=Article.TYPE_ARCHIVE, slug=slug)
+    serializer = ArticleSerializer(archive)
+
+    return render(request, "blog/archive.html", {
+        "archive": archive,
+        "archive_data": serializer.data,
+    })
 
 
 def view_todo_list(request):
@@ -93,3 +118,19 @@ def view_tweet_list(request):
 
 def view_tool_list(request):
     return render(request, "blog/tool_list.html")
+
+
+class ArchiveViewSet(viewsets.ModelViewSet):
+    authentication_classes = (authentication.SessionAuthentication, authentication.BasicAuthentication)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    queryset = Article.objects.filter(type=Article.TYPE_ARCHIVE).all()
+    serializer_class = ArticleSerializer
+
+    @action(methods=['POST', ], detail=False)
+    def save_zhihu(self, request: Request, **kwargs):
+        logger.debug("kwargs=%s", kwargs)
+        html = request.data.get("html")
+        logger.info("html=%s", html)
+
+        return Response({'msg': 'OK'})

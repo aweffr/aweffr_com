@@ -6,6 +6,7 @@ import StudyIndex from './pages/study/StudyIndex';
 import TweetIndex from './pages/tweet/TweetIndex';
 import ArchiveIndex from './pages/archive/ArchiveIndex';
 import Archive from './pages/archive/Archive';
+import Index from './pages/Index';
 
 function App() {
   let Component: any = () => null;
@@ -23,6 +24,8 @@ function App() {
     Component = StudyIndex;
   } else if (window.location.pathname.endsWith('/tweet/')) {
     Component = TweetIndex;
+  } else {
+    Component = Index;
   }
   return (
     <div className="App">

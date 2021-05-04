@@ -182,9 +182,29 @@ class Article(models.Model):
     def content_html(self):
         return convert_markdown_to_html(self.content_markdown)
 
+    @classmethod
+    def update_archive_title(cls, origin_title, origin_source):
+        prefix_list = ['转载', ]
+        if origin_source == cls.SOURCE_ZHIHU:
+            prefix_list.append('知乎')
+        elif origin_source == cls.SOURCE_CAIXIN:
+            prefix_list.append('财新')
+        elif origin_source == cls.SOURCE_TECH_CONF:
+            prefix_list.append('TechConf')
+
+        new_title = origin_title[:]
+        prefix_to_add = [f'[{p}]' for p in prefix_list if p not in origin_title]
+
+        if len(prefix_to_add) > 0:
+            new_title = "".join(prefix_to_add) + new_title
+        return new_title
+
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if self.is_published and self.time_published is None:
             self.time_published = timezone.now()
+
+        if self.type == self.TYPE_ARCHIVE:
+            self.title = self.update_archive_title(self.title, self.source)
 
         super().save(force_insert, force_update, using, update_fields)
 

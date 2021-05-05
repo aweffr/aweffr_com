@@ -34,10 +34,10 @@ const appPackageJson = require(paths.appPackageJson);
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 
 const webpackDevClientEntry = require.resolve(
-  'react-dev-utils/webpackHotDevClient'
+    'react-dev-utils/webpackHotDevClient',
 );
 const reactRefreshOverlayEntry = require.resolve(
-  'react-dev-utils/refreshOverlayInterop'
+    'react-dev-utils/refreshOverlayInterop',
 );
 
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
@@ -48,7 +48,7 @@ const emitErrorsAsWarnings = process.env.ESLINT_NO_DEV_ERRORS === 'true';
 const disableESLintPlugin = process.env.DISABLE_ESLINT_PLUGIN === 'true';
 
 const imageInlineSizeLimit = parseInt(
-  process.env.IMAGE_INLINE_SIZE_LIMIT || '10000'
+    process.env.IMAGE_INLINE_SIZE_LIMIT || '10000',
 );
 
 // Check if TypeScript is setup
@@ -78,7 +78,7 @@ const hasJsxRuntime = (() => {
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
-module.exports = function (webpackEnv) {
+module.exports = function(webpackEnv) {
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv === 'production';
 
@@ -103,9 +103,9 @@ module.exports = function (webpackEnv) {
         loader: MiniCssExtractPlugin.loader,
         // css is located in `static/css`, use '../../' to locate index.html folder
         // in production `paths.publicUrlOrPath` can be a relative path
-        options: paths.publicUrlOrPath.startsWith('.')
-          ? {publicPath: '../../'}
-          : {},
+        options: paths.publicUrlOrPath.startsWith('.') ?
+          {publicPath: '../../'} :
+          {},
       },
       {
         loader: require.resolve('css-loader'),
@@ -139,19 +139,19 @@ module.exports = function (webpackEnv) {
     ].filter(Boolean);
     if (preProcessor) {
       loaders.push(
-        {
-          loader: require.resolve('resolve-url-loader'),
-          options: {
-            sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
-            root: paths.appSrc,
+          {
+            loader: require.resolve('resolve-url-loader'),
+            options: {
+              sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
+              root: paths.appSrc,
+            },
           },
-        },
-        {
-          loader: require.resolve(preProcessor),
-          options: {
-            sourceMap: true,
+          {
+            loader: require.resolve(preProcessor),
+            options: {
+              sourceMap: true,
+            },
           },
-        }
       );
     }
     return loaders;
@@ -161,16 +161,16 @@ module.exports = function (webpackEnv) {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     // Stop compilation early in production
     bail: isEnvProduction,
-    devtool: isEnvProduction
-      ? shouldUseSourceMap
-        ? 'source-map'
-        : false
-      : isEnvDevelopment && 'cheap-module-source-map',
+    devtool: isEnvProduction ?
+      shouldUseSourceMap ?
+        'source-map' :
+        false :
+      isEnvDevelopment && 'cheap-module-source-map',
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
     entry:
-      isEnvDevelopment && !shouldUseReactRefresh
-        ? [
+      isEnvDevelopment && !shouldUseReactRefresh ?
+        [
           // Include an alternative client for WebpackDevServer. A client's job is to
           // connect to WebpackDevServer by a socket and get notified about changes.
           // When you save a file, the client will either apply hot updates (in case
@@ -191,8 +191,8 @@ module.exports = function (webpackEnv) {
           // We include the app code last so that if there is a runtime error during
           // initialization, it doesn't blow up the WebpackDevServer client, and
           // changing JS code would still trigger a refresh.
-        ]
-        : paths.appIndexJs,
+        ] :
+        paths.appIndexJs,
     output: {
       // The build folder.
       path: isEnvProduction ? paths.appBuild : undefined,
@@ -200,27 +200,27 @@ module.exports = function (webpackEnv) {
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
       // In development, it does not produce real files.
-      filename: isEnvProduction
-        ? 'static/js/[name].[contenthash:8].js'
-        : isEnvDevelopment && 'static/js/bundle.js',
+      filename: isEnvProduction ?
+        'static/js/[name].[contenthash:8].js' :
+        isEnvDevelopment && 'static/js/bundle.js',
       // TODO: remove this when upgrading to webpack 5
       futureEmitAssets: true,
       // There are also additional JS chunk files if you use code splitting.
-      chunkFilename: isEnvProduction
-        ? 'static/js/[name].[contenthash:8].chunk.js'
-        : isEnvDevelopment && 'static/js/[name].chunk.js',
+      chunkFilename: isEnvProduction ?
+        'static/js/[name].[contenthash:8].chunk.js' :
+        isEnvDevelopment && 'static/js/[name].chunk.js',
       // webpack uses `publicPath` to determine where the app is being served from.
       // It requires a trailing slash, or the file assets will get an incorrect path.
       // We inferred the "public path" (such as / or /my-project) from homepage.
       publicPath: isEnvDevelopment ? 'http://127.0.0.1:3000/' : paths.publicUrlOrPath,
       // Point sourcemap entries to original disk location (format as URL on Windows)
-      devtoolModuleFilenameTemplate: isEnvProduction
-        ? info =>
+      devtoolModuleFilenameTemplate: isEnvProduction ?
+        (info) =>
           path
-            .relative(paths.appSrc, info.absoluteResourcePath)
-            .replace(/\\/g, '/')
-        : isEnvDevelopment &&
-        (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
+              .relative(paths.appSrc, info.absoluteResourcePath)
+              .replace(/\\/g, '/') :
+        isEnvDevelopment &&
+        ((info) => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
       // Prevents conflicts when multiple webpack runtimes (from different apps)
       // are used on the same page.
       jsonpFunction: `webpackJsonp${appPackageJson.name}`,
@@ -276,16 +276,16 @@ module.exports = function (webpackEnv) {
         new OptimizeCSSAssetsPlugin({
           cssProcessorOptions: {
             parser: safePostCssParser,
-            map: shouldUseSourceMap
-              ? {
+            map: shouldUseSourceMap ?
+              {
                 // `inline: false` forces the sourcemap to be output into a
                 // separate file
                 inline: false,
                 // `annotation: true` appends the sourceMappingURL to the end of
                 // the css file, helping the browser find the sourcemap
                 annotation: true,
-              }
-              : false,
+              } :
+              false,
           },
           cssProcessorPluginOptions: {
             preset: ['default', {minifyFontValues: {removeQuotes: false}}],
@@ -303,7 +303,7 @@ module.exports = function (webpackEnv) {
       // https://twitter.com/wSokra/status/969679223278505985
       // https://github.com/facebook/create-react-app/issues/5358
       runtimeChunk: {
-        name: entrypoint => `runtime-${entrypoint.name}`,
+        name: (entrypoint) => `runtime-${entrypoint.name}`,
       },
     },
     resolve: {
@@ -312,7 +312,7 @@ module.exports = function (webpackEnv) {
       // if there are any conflicts. This matches Node resolution mechanism.
       // https://github.com/facebook/create-react-app/issues/253
       modules: ['node_modules', paths.appNodeModules].concat(
-        modules.additionalModulePaths || []
+          modules.additionalModulePaths || [],
       ),
       // These are the reasonable defaults supported by the Node ecosystem.
       // We also include JSX as a common component filename extension to support
@@ -321,8 +321,8 @@ module.exports = function (webpackEnv) {
       // `web` extension prefixes have been added for better support
       // for React Native Web.
       extensions: paths.moduleFileExtensions
-        .map(ext => `.${ext}`)
-        .filter(ext => useTypeScript || !ext.includes('ts')),
+          .map((ext) => `.${ext}`)
+          .filter((ext) => useTypeScript || !ext.includes('ts')),
       alias: {
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
@@ -396,7 +396,7 @@ module.exports = function (webpackEnv) {
               loader: require.resolve('babel-loader'),
               options: {
                 customize: require.resolve(
-                  'babel-preset-react-app/webpack-overrides'
+                    'babel-preset-react-app/webpack-overrides',
                 ),
                 presets: [
                   [
@@ -471,9 +471,9 @@ module.exports = function (webpackEnv) {
               exclude: cssModuleRegex,
               use: getStyleLoaders({
                 importLoaders: 1,
-                sourceMap: isEnvProduction
-                  ? shouldUseSourceMap
-                  : isEnvDevelopment,
+                sourceMap: isEnvProduction ?
+                  shouldUseSourceMap :
+                  isEnvDevelopment,
               }),
               // Don't consider CSS imports dead code even if the
               // containing package claims to have no side effects.
@@ -487,9 +487,9 @@ module.exports = function (webpackEnv) {
               test: cssModuleRegex,
               use: getStyleLoaders({
                 importLoaders: 1,
-                sourceMap: isEnvProduction
-                  ? shouldUseSourceMap
-                  : isEnvDevelopment,
+                sourceMap: isEnvProduction ?
+                  shouldUseSourceMap :
+                  isEnvDevelopment,
                 modules: {
                   getLocalIdent: getCSSModuleLocalIdent,
                 },
@@ -502,13 +502,13 @@ module.exports = function (webpackEnv) {
               test: sassRegex,
               exclude: sassModuleRegex,
               use: getStyleLoaders(
-                {
-                  importLoaders: 3,
-                  sourceMap: isEnvProduction
-                    ? shouldUseSourceMap
-                    : isEnvDevelopment,
-                },
-                'sass-loader'
+                  {
+                    importLoaders: 3,
+                    sourceMap: isEnvProduction ?
+                    shouldUseSourceMap :
+                    isEnvDevelopment,
+                  },
+                  'sass-loader',
               ),
               // Don't consider CSS imports dead code even if the
               // containing package claims to have no side effects.
@@ -521,16 +521,16 @@ module.exports = function (webpackEnv) {
             {
               test: sassModuleRegex,
               use: getStyleLoaders(
-                {
-                  importLoaders: 3,
-                  sourceMap: isEnvProduction
-                    ? shouldUseSourceMap
-                    : isEnvDevelopment,
-                  modules: {
-                    getLocalIdent: getCSSModuleLocalIdent,
+                  {
+                    importLoaders: 3,
+                    sourceMap: isEnvProduction ?
+                    shouldUseSourceMap :
+                    isEnvDevelopment,
+                    modules: {
+                      getLocalIdent: getCSSModuleLocalIdent,
+                    },
                   },
-                },
-                'sass-loader'
+                  'sass-loader',
               ),
             },
             // "file" loader makes sure those assets get served by WebpackDevServer.
@@ -558,14 +558,14 @@ module.exports = function (webpackEnv) {
     plugins: [
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
-        Object.assign(
-          {},
-          {
-            inject: true,
-            template: paths.appHtml,
-          },
-          isEnvProduction
-            ? {
+          Object.assign(
+              {},
+              {
+                inject: true,
+                template: paths.appHtml,
+              },
+          isEnvProduction ?
+            {
               minify: {
                 removeComments: true,
                 collapseWhitespace: true,
@@ -578,9 +578,9 @@ module.exports = function (webpackEnv) {
                 minifyCSS: true,
                 minifyURLs: true,
               },
-            }
-            : undefined
-        )
+            } :
+            undefined,
+          ),
       ),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
@@ -652,7 +652,7 @@ module.exports = function (webpackEnv) {
             return manifest;
           }, seed);
           const entrypointFiles = entrypoints.main.filter(
-            fileName => !fileName.endsWith('.map')
+              (fileName) => !fileName.endsWith('.map'),
           );
 
           return {
@@ -688,12 +688,12 @@ module.exports = function (webpackEnv) {
         }),
         async: isEnvDevelopment,
         checkSyntacticErrors: true,
-        resolveModuleNameModule: process.versions.pnp
-          ? `${__dirname}/pnpTs.js`
-          : undefined,
-        resolveTypeReferenceDirectiveModule: process.versions.pnp
-          ? `${__dirname}/pnpTs.js`
-          : undefined,
+        resolveModuleNameModule: process.versions.pnp ?
+          `${__dirname}/pnpTs.js` :
+          undefined,
+        resolveTypeReferenceDirectiveModule: process.versions.pnp ?
+          `${__dirname}/pnpTs.js` :
+          undefined,
         tsconfig: paths.appTsConfig,
         reportFiles: [
           // This one is specifically to match during CI tests,
@@ -721,8 +721,8 @@ module.exports = function (webpackEnv) {
         context: paths.appSrc,
         cache: true,
         cacheLocation: path.resolve(
-          paths.appNodeModules,
-          '.cache/.eslintcache'
+            paths.appNodeModules,
+            '.cache/.eslintcache',
         ),
         // ESLint class options
         cwd: paths.appPath,
@@ -756,11 +756,12 @@ module.exports = function (webpackEnv) {
   };
   if (isEnvProduction) {
     config.externals = {
-      react: 'React',
+      'react': 'React',
       'react-dom': 'ReactDOM',
-      axios: 'axios',
-      moment: 'moment',
-    }
+      'axios': 'axios',
+      'moment': 'moment',
+      'lodash': '_',
+    };
   }
   return config;
 };
